@@ -63,6 +63,14 @@ class ContactsController extends Controller
         $newcontact->group()->associate($request['group']);
          
         $newcontact->save();
+
+        $insert_id = $newcontact->id;
+        if($files =$request->file('image')){
+            $destinationPath ='uploads/';
+            $profileImage =$insert_id . "_img" . $files->getClientOriginalExtension();
+            $files->move($destinationPath, $profileImage);
+            Contact::where('id', $insert_id)->update(['image' => $profileImage]);
+        }
         return redirect('contacts')->with('message', 'Contact Saved!');
     }
 
@@ -87,6 +95,9 @@ class ContactsController extends Controller
     {
         $contact = Contact::find($id);
         $groups =Group::pluck('name', 'id');
+       
+        // dd($groups);
+        // dd($contact->group_id);
         return view('contacts.edit', compact('contact', 'groups'));
     }
 
@@ -99,7 +110,30 @@ class ContactsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            "name" => "required|min:5",
+            "company" => "required",
+            "email" => "required|email",
+        ]);
+    
+        $contact = Contact::find($id);
+        $contact->name = $request['name'];
+        $contact->company = $request['company'];
+        $contact->email = $request['email'];
+        $contact->phone = $request['phone'];    
+        $contact->address = $request['address'];
+        $contact->group()->associate($request['group']);
+
+        if($files = $request->file('image')){
+            $destinationPath = 'uploads/';
+            $profileImage = $id . "_img." . $files->getClientOriginalExtension();
+            $files->move($destinationPath,$profileImage);
+            $contact->image = $profileImage;
+        }
+         
+        $contact->save();
+
+        return redirect('contacts')->with('message', 'Contact Updated!');
     }
 
     /**
@@ -110,6 +144,11 @@ class ContactsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $contact = Contact::find($id);
+        if(file_exists('uploads/'.$contact->image)){
+            unlink('uploads/'. $contact->image);
+        }
+        $contact->delete();
+        return redirect("/contacts")->with('message', 'Contact deleted!');
     }
 }

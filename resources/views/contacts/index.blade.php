@@ -12,7 +12,18 @@
                     <div class="media">
                       <div class="media-left">
                         <a href="#">
-                          <img class="media-object" src="http://placehold.it/100x100" alt="...">
+                          <!-- <img class="media-object" src="http://placehold.it/100x100" alt="..."> -->
+                          <!-- @if($contact->image != null)
+                            <img src="{{ URL('/') }}/uploads/{{$contact->image}}" style="max-height:50px"/>
+                            @else
+                                No image
+                          @endif -->
+                          
+                          @if($contact->image != null)
+                            {!!Html::image('uploads/'. $contact->image, $contact->name, ['class' => 'media-object' , 'widh'=> 100 , 'height' =>100]) !!}
+                          @else
+                          <img src="/uploads/default.png" style="height:100px"/>
+                            @endif
                         </a>
                       </div>
                       <div class="media-body">
@@ -26,13 +37,15 @@
                   </td>
                   <td width="100" class="middle">
                     <div>
+                    {!!Form::open(['method' => 'DELETE', 'route'=>['contacts.destroy',$contact->id]])!!}
                     <a href="{{ route('contacts.edit', ['contact' => $contact->id]) }}" class="btn btn-circle btn-default btn-xs" title="Edit">
                         <i class="glyphicon glyphicon-edit"></i>
                       </a>
-                      <a href="#" class="btn btn-circle btn-danger btn-xs" title="Delete">
+                      <button onclick="return confirm('Are you sure you want to delete it')" class="btn btn-circle btn-danger btn-xs" title="Delete">
                         <i class="glyphicon glyphicon-remove"></i>
-                      </a>
+                      </button>
                     </div>
+                    {!! Form::close()!!}
                   </td>
                 </tr>
                 @endforeach
