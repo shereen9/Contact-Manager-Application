@@ -14,6 +14,9 @@
     <link href="/assets/jqueryui/jquery-ui.min.css" rel="stylesheet">
     <link href="/assets/jqueryui/jquery-ui.theme.min.css" rel="stylesheet"> -->
     <link href="/assets/css/custom.css" rel="stylesheet">
+    <link href="/assets/jqueryui/jquery-ui.min.js" rel="stylesheet">
+
+
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -112,6 +115,20 @@
     <script src="/assets/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="/assets/js/jasny-bootstrap.min.js"></script>
+    <script src="/assets/jqueryui/jquery-ui.min.js"></script>
+    
+  <script>
+    $(function() {
+      $("input[name=term]").autocomplete({
+        source: "{{route('contacts.autocomplete')}}",
+        minLength: 3,
+        select: function(event, ui) {
+        $(this).val(ui.item.value);
+        }
+      });
+    });
+  </script>
     <!-- <script src="/assets/js/jasny-bootstrap.min.js"></script>
     <script src="/assets/jqueryui/jquery-ui.min.js"></script> -->
     <!-- <script>
