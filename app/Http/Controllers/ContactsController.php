@@ -18,13 +18,34 @@ class ContactsController extends Controller
 
     public function index(Request $request)
     {
+        $contacts = Contact::where(function($query) use ($request){
+            if ($group_id = ($request->get('group_id'))){
+                $query->where('group_id', $group_id);
+            }
+            if($term = ($request->get('term')))
+            {
+                $keywords = '%' . $term . '%';
+                $query->orWhere("name",'LIKE', $keywords);
+                $query->orWhere("company",'LIKE', $keywords);
+                $query->orWhere("email",'LIKE', $keywords);
+            }
+        })
+       ->orderBy('id', 'desc')
+       ->paginate($this->limit);
         
-        if ($group_id = ($request->get('group_id'))) {
-            $contacts = Contact::where('group_id', $group_id)->orderBy('id', 'desc')->paginate($this->limit);
-        }
-        else{
-            $contacts = Contact::orderBy('id', 'desc')->paginate($this->limit);
-        }
+        // if ($group_id = ($request->get('group_id'))) {
+        //     $contacts = Contact::where('group_id', $group_id)->orderBy('id', 'desc')->paginate($this->limit);
+        // }
+        // else{
+        //     $contacts = Contact::orderBy('id', 'desc')->paginate($this->limit);
+        // }
+        // if($term = ($request->get('term')))
+        // {
+        //     $contacts= Contact::query()
+        //     ->where('name', 'LIKE', "%{$term}%") 
+        //     ->orWhere('email', 'LIKE', "%{$term}%") 
+        //     ->get();
+        // }
         // $contacts = Contact::paginate(3);
         return view('contacts.index', compact('contacts'));
     }
@@ -145,7 +166,7 @@ class ContactsController extends Controller
     public function destroy($id)
     {
         $contact = Contact::find($id);
-        if(file_exists('uploads/'.$contact->image)){
+        if(file_exists('uploads/'. $contact->image)){
             unlink('uploads/'. $contact->image);
         }
         $contact->delete();
