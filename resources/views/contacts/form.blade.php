@@ -71,7 +71,7 @@
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                       <div class="fileinput-new thumbnail" style="width: 150px; height: 150px;">
                         <!-- <img src="http://via.placeholder.com/150x150"  alt="photo"> -->
-                        @if($contact->image != null)
+                        @if(isset($contact) && $contact->image != null)
                             {!!Html::image('uploads/'. $contact->image, $contact->name, ['class' => 'media-object' , 'widh'=> 100 , 'height' =>100]) !!}
                           @else
                           <img src="/uploads/default.png" style="height:100%; width:100%;"/>
