@@ -56,14 +56,14 @@
                     </div>
                     <div class="form-group" id="add-new-group" style="display; none;">
                       <div class="col-md-offset-3 col-md-8">
-                        <!-- <div class="input-group">
-                          <input type="text" class="form-control" name="group_id" placeholder="Enter group name" aria-label="Enter group name" aria-describedby="button-addon2">
+                        <div class="input-group">
+                          <input type="text" id="new_group" class="form-control" name="new_group" placeholder="Enter group name" aria-label="Enter group name" aria-describedby="button-addon2">
                           <span class="input-group-btn">
-                            <a class="btn btn-default" type="button" id="button-addon2">
+                            <a class="btn btn-default" type="button" >
                               <i class="glyphicon glyphicon-ok"></i>
                             </a>
                           </span>
-                        </div> -->
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -98,3 +98,15 @@
                     </div>
                   </div>
                 </div>
+
+@section('form-script')
+<script>
+$("#add-new-group").hide();
+$('#add-group-btn').click(function(){
+  $("#add-new-group").slideToggle(function(){
+    $("#new_group").focus();
+  });
+  return false;
+});
+</script>
+@endsection
