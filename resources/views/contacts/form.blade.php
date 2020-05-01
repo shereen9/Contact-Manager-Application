@@ -59,7 +59,7 @@
                         <div class="input-group">
                           <input type="text" id="new_group" class="form-control" name="new_group" placeholder="Enter group name" aria-label="Enter group name" aria-describedby="button-addon2">
                           <span class="input-group-btn">
-                            <a class="btn btn-default" type="button" >
+                            <a id= "add-new-btn" class="btn btn-default" type="button" >
                               <i class="glyphicon glyphicon-ok"></i>
                             </a>
                           </span>
@@ -107,6 +107,32 @@ $('#add-group-btn').click(function(){
     $("#new_group").focus();
   });
   return false;
+});
+
+$("#add-new-btn").click(function(){
+  $.ajax({
+    url: "{{route("groups.store")}}",
+    method: 'post',
+    data: {
+      name: $("#new_group").val(),
+      _token: "{{ csrf_token()}}"
+    },
+    success: function(response){
+      console.log(response);
+    },
+    error: function(xhr){
+      var errors = xhr.responseJSON;
+      var error = errors.name[0];
+      if(error){
+      
+        var inputGroup = newGroup.closest('.input-group');
+        inputGroup.next('.text-danger').remove();
+        inputGroup
+        .addClass('has-error')
+        .after('<p class="text-danger"' + error + '</p>');
+      }
+    }
+  });
 });
 </script>
 @endsection

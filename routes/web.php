@@ -15,5 +15,6 @@ Route::get('/', function () {
     return view('layouts.main');
 });
 
+Route::post('groups/store', 'GroupsController@store')->name('groups.store');
 Route::get('contacts/autocomplete', ['uses' => 'ContactsController@autocomplete', 'as'=>'contacts.autocomplete']);
 Route::resource('contacts', 'ContactsController');
