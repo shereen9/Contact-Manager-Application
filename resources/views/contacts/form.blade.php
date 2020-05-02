@@ -110,6 +110,9 @@ $('#add-group-btn').click(function(){
 });
 
 $("#add-new-btn").click(function(){
+  var newGroup = $("#new_group");
+  var inputGroup = newGroup.closest('.input-group');
+  
   $.ajax({
     url: "{{route("groups.store")}}",
     method: 'post',
@@ -117,15 +120,28 @@ $("#add-new-btn").click(function(){
       name: $("#new_group").val(),
       _token: "{{ csrf_token()}}"
     },
-    success: function(response){
-      console.log(response);
+    success: function(group){
+      if(group.id != null){
+        inputGroup.removeClass('has-error');
+        inputGroup.next('.text-danger').remove();
+
+        var newOption = $('<option></option>') 
+             .attr('value', group.id)
+             .attr('selected', true)
+             .text(group.name)
+
+        $("select[name=group]")
+           .append( newOption );
+
+              newGroup.val("");
+      }
     },
     error: function(xhr){
       var errors = xhr.responseJSON;
-      var error = errors.name[0];
+      var error = errors.errors.name[0];
       if(error){
       
-        var inputGroup = newGroup.closest('.input-group');
+        
         inputGroup.next('.text-danger').remove();
         inputGroup
         .addClass('has-error')

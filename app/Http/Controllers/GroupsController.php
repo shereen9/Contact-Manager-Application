@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Group;
 
 class GroupsController extends Controller
 {
@@ -11,5 +12,7 @@ class GroupsController extends Controller
         $request->validate([
             "name" => "required|unique:groups"
         ]);
+
+       return Group::create($request->all());
     }
 }
