@@ -12,9 +12,13 @@
 */
 
 Route::get('/', function () {
-    return view('layouts.main');
+    return view('welcome');
 });
 
 Route::post('groups/store', 'GroupsController@store')->name('groups.store');
 Route::get('contacts/autocomplete', ['uses' => 'ContactsController@autocomplete', 'as'=>'contacts.autocomplete']);
 Route::resource('contacts', 'ContactsController');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
