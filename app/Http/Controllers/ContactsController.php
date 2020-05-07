@@ -14,6 +14,10 @@ class ContactsController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     private $limit= 3;
 
     public function autocomplete(Request $request)
