@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Contact;
 use App\Group;
+use Auth;
 
 class ContactsController extends Controller
 {
@@ -44,6 +45,7 @@ class ContactsController extends Controller
     public function index(Request $request)
     {
         $contacts = Contact::where(function($query) use ($request){
+            $query->where("user_id",Auth::id());
             if ($group_id = ($request->get('group_id'))){
                 $query->where('group_id', $group_id);
             }
@@ -107,6 +109,7 @@ class ContactsController extends Controller
         $newcontact->phone = $request['phone'];    
         $newcontact->address = $request['address'];
         $newcontact->group()->associate($request['group']);
+        $newcontact->user_id = Auth::id(); 
          
         $newcontact->save();
 
@@ -139,7 +142,8 @@ class ContactsController extends Controller
      */
     public function edit($id)
     {
-        $contact = Contact::find($id);
+        $contact = Contact::findOrFail($id);
+        $this->authorize('modify', $contact);
         $groups =Group::pluck('name', 'id');
        
         // dd($groups);
@@ -162,7 +166,8 @@ class ContactsController extends Controller
             "email" => "required|email",
         ]);
     
-        $contact = Contact::find($id);
+        $contact = Contact::findOrFail($id);
+        $this->authorize('modify', $contact);
         $contact->name = $request['name'];
         $contact->company = $request['company'];
         $contact->email = $request['email'];
@@ -190,7 +195,8 @@ class ContactsController extends Controller
      */
     public function destroy($id)
     {
-        $contact = Contact::find($id);
+        $contact = Contact::findOrFail($id);
+        $this->authorize('modify', $contact); 
         if(file_exists('uploads/'. $contact->image)){
             unlink('uploads/'. $contact->image);
         }

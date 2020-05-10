@@ -28,6 +28,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function contacts()
+    {
+        return hasMany('App\Contact');
+    }
     /**
      * The attributes that should be cast to native types.
      *

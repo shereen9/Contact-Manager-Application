@@ -16,11 +16,12 @@
         <div class="collapse navbar-collapse" id="navbar-collapse">
         
           <!-- Left Side Of Navbar -->
-          <ul class="nav navbar-nav ">
-            <li class="{{ Request::segment(1)== 'home' ? 'active':''}}"><a href="{{ url('/home')}}">Home</a></li>
-            <li class="{{ Request::segment(1)== 'contacts' ? 'active' : ''}}"><a href="{{ route('contacts.index')}}">Contacts</a></li>
-
-          </ul>
+          @if (! Auth::guest())
+            <ul class="nav navbar-nav ">
+              <li class="{{ Request::segment(1)== 'home' ? 'active':''}}"><a href="{{ url('/home')}}">Home</a></li>
+              <li class="{{ Request::segment(1)== 'contacts' ? 'active' : ''}}"><a href="{{ route('contacts.index')}}">Contacts</a></li>
+            </ul>
+          @endif
 
           <!-- Right Side Of Navbar -->
           <ul class="nav navbar-nav navbar-right">
